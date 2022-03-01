@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+set -euo pipefail
+
+# Make all the directories created by the current user group-writable
+umask 0002
+
+# Create user to support arbitrary UIDs
+if ! whoami &> /dev/null; then
+    if [[ -w /etc/passwd ]]; then
+    echo "${USER_NAME:-app}:x:`id -u`:0:${USER_NAME:-app} user:${HOME}:/sbin/nologin" >> /etc/passwd
+    fi
+fi
+
+exec "${@}"

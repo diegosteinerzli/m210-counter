@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+set -euo pipefail
+
+# Make all the directories created by the current user group-writable
+umask 0002
+
+# Ensure $HOME exists and is accessible by group 0 (we don't know what the runtime UID will be)
+echo "${USER_NAME:-app}:x:`id -u`:0:${USER_NAME:-app} user:${HOME}:/sbin/nologin" >> /etc/passwd
+mkdir -p "${HOME}" "${APP_ROOT}"
+chown -R "${USER_UID}:0" "${HOME}" "${APP_ROOT}"
+chmod -R ug+rwx "${HOME}" /etc/passwd
