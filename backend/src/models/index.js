@@ -15,6 +15,7 @@ pg.types.setTypeParser(1114, 'text', function(text) {return text;});
 
 dbConf.port = config.port;
 dbConf.dialect = config.dialect
+dbConf.host = config.host
 dbConf.timezone = 'Europe/Vienna'
 dbConf.dialectOptions = {
   useUTC: false, //for reading from database

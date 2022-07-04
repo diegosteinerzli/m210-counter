@@ -1,26 +1,17 @@
 FROM node:17.5.0-alpine3.14
 
-ENV APP_ROOT=/srv/app
-ENV USER_NAME=app
-ENV USER_UID=1001
-ENV HOME=/opt/${USER_NAME}
+ARG UID=1001
+WORKDIR /srv/app
 
-COPY [ "./bin",  "/usr/local/bin/"]
-COPY [ "package.json", "package-lock.json",  "${APP_ROOT}/"]
-COPY [ "config", "${APP_ROOT}/config"]
-COPY [ "src", "${APP_ROOT}/src"]
+RUN adduser --disabled-password --uid "$UID" app
 
-USER 0
+COPY [ "package.json", "package-lock.json",  "./"]
+RUN npm install
 
-RUN /usr/local/bin/user_setup
+COPY [ "config", "config"]
+COPY [ "src", "src"]
 
-USER ${USER_UID}
-
-WORKDIR ${APP_ROOT}
-
-RUN npm install; \
-    npm run build
+RUN npm run build
 
 EXPOSE 8080
-ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
 CMD [ "npm", "start" ]
