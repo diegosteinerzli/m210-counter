@@ -225,14 +225,14 @@ class UseCaseManager extends Component {
       <Fragment>
         <Typography variant="h4">Use Cases</Typography>
         { /* captcha section */ }
-        { (this.state.captureExpired === null || this.state.captureExpired === true) && (
+        { (this.state.captureExpired === null || this.state.captureExpired === true) && (captcha_site_key) &&
           <ReCAPTCHA  
             ref={ this._reCaptchaRef }
             sitekey={ captcha_site_key }
             size="invisible"
             onChange={ this.handleCaptchaChange }
           />
-        )}
+        }
 
         { /* use case area */ }
         { this.state.useCases.length > 0 ? (
