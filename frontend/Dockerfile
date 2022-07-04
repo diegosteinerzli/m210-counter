@@ -1,26 +1,19 @@
 FROM node:17.5.0-alpine3.14
 
-ENV APP_ROOT=/srv/app
-ENV USER_NAME=app
-ENV USER_UID=1001
-ENV HOME=/opt/${USER_NAME}
+ARG UID=1001
+ARG REACT_APP_BACKEND_URL=''
+ARG REACT_APP_CAPTCHA_SITE_KEY=''
+WORKDIR /srv/app
 
-COPY [ "./bin",  "/usr/local/bin/"]
-COPY [ "package.json", "package-lock.json",  "${APP_ROOT}/"]
-COPY [ "public", "${APP_ROOT}/public"]
-COPY [ "src", "${APP_ROOT}/src"]
+RUN adduser --disabled-password --uid "$UID" app
 
-USER 0
+COPY [ "package.json", "package-lock.json",  "./"]
+RUN npm install
 
-RUN /usr/local/bin/user_setup
+COPY [ "public", "public"]
+COPY [ "src", "src"]
 
-USER ${USER_UID}
-
-WORKDIR ${APP_ROOT}
-
-RUN npm install; \
-    npm run build
+RUN npm run build
 
 EXPOSE 3100
-ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
 CMD [ "npm", "start" ]
