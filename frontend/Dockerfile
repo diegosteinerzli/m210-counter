@@ -12,6 +12,7 @@ RUN npm install
 
 COPY [ "public", "public"]
 COPY [ "src", "src"]
+RUN npm run build
 
-EXPOSE 3100
-CMD [ "npm", "run", "dev" ]
+EXPOSE 3000
+CMD [ "npm", "start" ]
